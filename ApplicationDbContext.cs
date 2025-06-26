@@ -27,8 +27,11 @@ namespace DarkAuto
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            modelBuilder.Entity<GetAllUsersDTO>().HasNoKey();
-            modelBuilder.Entity<GetUserByCredentialsDTO>().HasNoKey();
+            modelBuilder.Entity<GetAllUsersDTO>().HasNoKey().ToFunction("GetAllUsers");
+            modelBuilder.Entity<GetUserByCredentialsDTO>().HasNoKey().ToFunction("GetUserByCredentials");
+            modelBuilder.Entity<GetAllCarsDTO>().HasNoKey().ToFunction("GetAllCars");
+            modelBuilder.Entity<GetDeliveryCompaniesDTO>().HasNoKey().ToFunction("GetDeliveryCompanies");
+            modelBuilder.Entity<GetLocationsDTO>().HasNoKey().ToFunction("GetLocations");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)

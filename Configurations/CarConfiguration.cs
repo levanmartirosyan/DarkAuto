@@ -39,7 +39,7 @@ namespace DarkAuto.Configurations
                 .IsRequired();
 
             builder.Property(c => c.SellDate)
-                .IsRequired();
+                .IsRequired(false);
 
             builder.HasOne(c => c.carBrand)
                 .WithMany()
@@ -59,11 +59,6 @@ namespace DarkAuto.Configurations
             builder.HasOne(c => c.location)
                 .WithMany()
                 .HasForeignKey(c => c.LocationId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(c => c.payment)
-                .WithMany()
-                .HasForeignKey(c => c.PaymentId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

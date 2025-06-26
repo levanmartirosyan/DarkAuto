@@ -24,7 +24,7 @@ namespace DarkAuto.Repositories.GetAllUsers
         #endregion
 
         #region Methods
-        public ResultModel<List<GetAllUsersDTO>> GetAllUsers(int? UserId = null)
+        public ResultModel<List<GetAllUsersDTO>> GetAllUsers()
         {
             var result = new ResultModel<List<GetAllUsersDTO>>();
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DarkAuto.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,33 @@ namespace DarkAuto.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeliveryCompanies", x => x.CompanyId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GetAllUsersDTO",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GetUserByCredentialsDTO",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -100,6 +127,7 @@ namespace DarkAuto.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarId = table.Column<int>(type: "int", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
+                    BidAmount = table.Column<double>(type: "float", nullable: false),
                     BidDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -117,7 +145,7 @@ namespace DarkAuto.Migrations
                 name: "Cars",
                 columns: table => new
                 {
-                    CardId = table.Column<int>(type: "int", nullable: false)
+                    CarId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarBrandId = table.Column<int>(type: "int", nullable: false),
                     CarModelName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -134,7 +162,7 @@ namespace DarkAuto.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cars", x => x.CardId);
+                    table.PrimaryKey("PK_Cars", x => x.CarId);
                     table.ForeignKey(
                         name: "FK_Cars_CarBrands_CarBrandId",
                         column: x => x.CarBrandId,
@@ -172,12 +200,12 @@ namespace DarkAuto.Migrations
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelivered = table.Column<bool>(type: "bit", nullable: false),
                     DeliveryCompanyId = table.Column<int>(type: "int", nullable: false),
-                    TrackingNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    TrackingNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DeliveryCost = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    CardId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<int>(type: "int", nullable: false),
-                    DeliveryCompanyCompanyId = table.Column<int>(type: "int", nullable: false)
+                    CarId1 = table.Column<int>(type: "int", nullable: true),
+                    UserId1 = table.Column<int>(type: "int", nullable: true),
+                    DeliveryCompanyCompanyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -186,20 +214,18 @@ namespace DarkAuto.Migrations
                         name: "FK_Deliveries_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
-                        principalColumn: "CardId",
+                        principalColumn: "CarId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Deliveries_Cars_CardId",
-                        column: x => x.CardId,
+                        name: "FK_Deliveries_Cars_CarId1",
+                        column: x => x.CarId1,
                         principalTable: "Cars",
-                        principalColumn: "CardId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CarId");
                     table.ForeignKey(
                         name: "FK_Deliveries_DeliveryCompanies_DeliveryCompanyCompanyId",
                         column: x => x.DeliveryCompanyCompanyId,
                         principalTable: "DeliveryCompanies",
-                        principalColumn: "CompanyId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CompanyId");
                     table.ForeignKey(
                         name: "FK_Deliveries_DeliveryCompanies_DeliveryCompanyId",
                         column: x => x.DeliveryCompanyId,
@@ -216,8 +242,7 @@ namespace DarkAuto.Migrations
                         name: "FK_Deliveries_Users_UserId1",
                         column: x => x.UserId1,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -229,7 +254,7 @@ namespace DarkAuto.Migrations
                     isPaid = table.Column<bool>(type: "bit", nullable: false),
                     PaymentAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     DeliveryId = table.Column<int>(type: "int", nullable: false),
-                    DeliveryId1 = table.Column<int>(type: "int", nullable: false)
+                    DeliveryId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -244,8 +269,7 @@ namespace DarkAuto.Migrations
                         name: "FK_Payments_Deliveries_DeliveryId1",
                         column: x => x.DeliveryId1,
                         principalTable: "Deliveries",
-                        principalColumn: "DeliveryId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "DeliveryId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -284,14 +308,14 @@ namespace DarkAuto.Migrations
                 column: "SellerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Deliveries_CardId",
-                table: "Deliveries",
-                column: "CardId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Deliveries_CarId",
                 table: "Deliveries",
                 column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Deliveries_CarId1",
+                table: "Deliveries",
+                column: "CarId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Deliveries_DeliveryCompanyCompanyId",
@@ -334,7 +358,7 @@ namespace DarkAuto.Migrations
                 table: "Bids",
                 column: "CarId",
                 principalTable: "Cars",
-                principalColumn: "CardId",
+                principalColumn: "CarId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
@@ -354,11 +378,17 @@ namespace DarkAuto.Migrations
                 table: "Deliveries");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Deliveries_Cars_CardId",
+                name: "FK_Deliveries_Cars_CarId1",
                 table: "Deliveries");
 
             migrationBuilder.DropTable(
                 name: "Bids");
+
+            migrationBuilder.DropTable(
+                name: "GetAllUsersDTO");
+
+            migrationBuilder.DropTable(
+                name: "GetUserByCredentialsDTO");
 
             migrationBuilder.DropTable(
                 name: "Cars");

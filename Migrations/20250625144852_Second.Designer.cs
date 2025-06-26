@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DarkAuto.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250622133806_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250625144852_Second")]
+    partial class Second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,43 @@ namespace DarkAuto.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DarkAuto.DTOs.GetAllUsersDTO", b =>
+                {
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("GetAllUsersDTO");
+                });
+
+            modelBuilder.Entity("DarkAuto.DTOs.GetUserByCredentialsDTO", b =>
+                {
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("GetUserByCredentialsDTO");
+                });
+
             modelBuilder.Entity("DarkAuto.Models.Bid", b =>
                 {
                     b.Property<int>("BidId")
@@ -32,6 +69,9 @@ namespace DarkAuto.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BidId"));
+
+                    b.Property<double>("BidAmount")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("BidDate")
                         .HasColumnType("datetime2");
@@ -53,11 +93,11 @@ namespace DarkAuto.Migrations
 
             modelBuilder.Entity("DarkAuto.Models.Car", b =>
                 {
-                    b.Property<int>("CardId")
+                    b.Property<int>("CarId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CardId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarId"));
 
                     b.Property<int>("CarBrandId")
                         .HasColumnType("int");
@@ -99,7 +139,7 @@ namespace DarkAuto.Migrations
                     b.Property<int>("SellerId")
                         .HasColumnType("int");
 
-                    b.HasKey("CardId");
+                    b.HasKey("CarId");
 
                     b.HasIndex("CarBrandId");
 
@@ -161,7 +201,7 @@ namespace DarkAuto.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CardId")
+                    b.Property<int?>("CarId1")
                         .HasColumnType("int");
 
                     b.Property<string>("DeliveryAddress")
@@ -169,7 +209,7 @@ namespace DarkAuto.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("DeliveryCompanyCompanyId")
+                    b.Property<int?>("DeliveryCompanyCompanyId")
                         .HasColumnType("int");
 
                     b.Property<int>("DeliveryCompanyId")
@@ -185,21 +225,20 @@ namespace DarkAuto.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("TrackingNumber")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId1")
+                    b.Property<int?>("UserId1")
                         .HasColumnType("int");
 
                     b.HasKey("DeliveryId");
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("CardId");
+                    b.HasIndex("CarId1");
 
                     b.HasIndex("DeliveryCompanyCompanyId");
 
@@ -259,9 +298,6 @@ namespace DarkAuto.Migrations
                     b.Property<int>("DeliveryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DeliveryId1")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("PaymentAmount")
                         .HasColumnType("decimal(10,2)");
 
@@ -271,8 +307,6 @@ namespace DarkAuto.Migrations
                     b.HasKey("PaymentId");
 
                     b.HasIndex("DeliveryId");
-
-                    b.HasIndex("DeliveryId1");
 
                     b.ToTable("Payments", (string)null);
                 });
@@ -401,15 +435,11 @@ namespace DarkAuto.Migrations
 
                     b.HasOne("DarkAuto.Models.Car", "Car")
                         .WithMany()
-                        .HasForeignKey("CardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarId1");
 
                     b.HasOne("DarkAuto.Models.DeliveryCompany", "DeliveryCompany")
                         .WithMany()
-                        .HasForeignKey("DeliveryCompanyCompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DeliveryCompanyCompanyId");
 
                     b.HasOne("DarkAuto.Models.DeliveryCompany", null)
                         .WithMany()
@@ -425,9 +455,7 @@ namespace DarkAuto.Migrations
 
                     b.HasOne("DarkAuto.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Car");
 
@@ -443,14 +471,6 @@ namespace DarkAuto.Migrations
                         .HasForeignKey("DeliveryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("DarkAuto.Models.Delivery", "Delivery")
-                        .WithMany()
-                        .HasForeignKey("DeliveryId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Delivery");
                 });
 #pragma warning restore 612, 618
         }

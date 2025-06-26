@@ -33,19 +33,10 @@ namespace DarkAuto.Configurations
             builder.Property(d => d.DeliveryCost)
                    .HasColumnType("decimal(10,2)");
 
-            builder.HasOne<Car>()
-                   .WithMany()
-                   .HasForeignKey(d => d.CarId)
-                   .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne<User>()
-                   .WithMany()
-                   .HasForeignKey(d => d.UserId)
-                   .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne<DeliveryCompany>() 
-                   .WithMany()
-                   .HasForeignKey(d => d.DeliveryCompanyId)
+            builder.HasOne(d => d.Payment)
+                   .WithOne(p => p.Delivery)
+                   .HasForeignKey<Delivery>(d => d.PaymentId) 
+                   .IsRequired(false)                         
                    .OnDelete(DeleteBehavior.Restrict);
         }
     }

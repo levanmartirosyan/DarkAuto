@@ -4,6 +4,7 @@ using DarkAuto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DarkAuto.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250626133946_Eighth")]
+    partial class Eighth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,6 +131,9 @@ namespace DarkAuto.Migrations
                     b.Property<DateTime>("ManufactureDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
@@ -144,6 +150,8 @@ namespace DarkAuto.Migrations
                     b.HasIndex("CarCategoryId");
 
                     b.HasIndex("LocationId");
+
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("SellerId");
 
@@ -388,6 +396,10 @@ namespace DarkAuto.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("DarkAuto.Models.Payment", null)
+                        .WithMany("cars")
+                        .HasForeignKey("PaymentId");
+
                     b.HasOne("DarkAuto.Models.Seller", "seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
@@ -438,6 +450,8 @@ namespace DarkAuto.Migrations
             modelBuilder.Entity("DarkAuto.Models.Payment", b =>
                 {
                     b.Navigation("Delivery");
+
+                    b.Navigation("cars");
                 });
 #pragma warning restore 612, 618
         }

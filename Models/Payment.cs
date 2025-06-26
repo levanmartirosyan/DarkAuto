@@ -9,9 +9,10 @@ namespace DarkAuto.Models
     public class Payment
     {
         public int PaymentId { get; set; }
-        public Boolean isPaid { get; set; }
+        public bool isPaid { get; set; }
         public double PaymentAmount { get; set; }
-        public int DeliveryId { get; set; }
+
+        public int? DeliveryId { get; set; }      
         public Delivery? Delivery { get; set; }
     }
 }

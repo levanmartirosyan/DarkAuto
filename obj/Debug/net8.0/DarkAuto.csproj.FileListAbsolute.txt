@@ -150,3 +150,5 @@ C:\Users\levan\OneDrive\Рабочий стол\ItStep Back\DarkAuto\DarkAuto\ob
 C:\Users\levan\OneDrive\Рабочий стол\ItStep Back\DarkAuto\DarkAuto\obj\Debug\net8.0\DarkAuto.pdb
 C:\Users\levan\OneDrive\Рабочий стол\ItStep Back\DarkAuto\DarkAuto\obj\Debug\net8.0\DarkAuto.genruntimeconfig.cache
 C:\Users\levan\OneDrive\Рабочий стол\ItStep Back\DarkAuto\DarkAuto\obj\Debug\net8.0\ref\DarkAuto.dll
+C:\Users\levan\OneDrive\Рабочий стол\ItStep Back\DarkAuto\DarkAuto\obj\Debug\net8.0\DarkAuto.sourcelink.json
+C:\Users\levan\OneDrive\Рабочий стол\ItStep Back\DarkAuto\DarkAuto\bin\Debug\net8.0\BCrypt.Net-Next.dll
