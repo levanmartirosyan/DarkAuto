@@ -44,5 +44,21 @@ namespace DarkAuto.Services
 
             return response;
         }
+
+        public async Task<ResultModel<bool>> EditUser(
+                int userId,
+                string? username,
+                string? email,
+                string? password,
+                bool? isAdmin)
+        {
+            await using var context = new ApplicationDbContext();
+
+            var repo = new EditUserRepository(context);
+
+            var response = await repo.EditUser(userId, username, email, password, isAdmin);
+
+            return response;
+        }
     }
 }

@@ -33,5 +33,16 @@ namespace DarkAuto.Services
 
             return response;
         }
+
+        public ResultModel<List<GetDeliveriesByUserDTO>> GetDeliveriesByUserId(int UserId)
+        {
+            using var context = new ApplicationDbContext();
+
+            var Repo = new GetDeliveriesByUserRepository(context);
+
+            var response = Repo.GetDeliveriesByUserId(UserId);
+
+            return response;
+        }
     }
 }

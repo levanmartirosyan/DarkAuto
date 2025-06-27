@@ -1,5 +1,6 @@
 ﻿using DarkAuto.DTOs;
 using EntityFrameworkLesson.Models.Shared;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -28,19 +29,34 @@ namespace DarkAuto.Repositories.Users
         {
             var result = new ResultModel<GetUserByCredentialsDTO>();
 
+            var hasher = new PasswordHasher<object>();
+
             try
             {
                 using (_context)
                 {
                     var user = _context.Set<GetUserByCredentialsDTO>()
-                 .FromSqlInterpolated($"SELECT * FROM GetUserByCredentials({email}, {password})")
+                 .FromSqlInterpolated($"SELECT * FROM GetUserByCredentials({email})")
                  .FirstOrDefault();
 
-                    if (user is not null)
+                    if (user is null)
                     {
-                        result.IsSuccess = true;
-                        result.Data = user;
+                        result.IsSuccess = false;
+                        result.ErrorMessage = "User not found.";
+                        return result;
                     }
+
+                    var passResult = hasher.VerifyHashedPassword(null, user.Password, password);
+
+                    if (passResult == PasswordVerificationResult.Failed)
+                    {
+                        result.IsSuccess = false;
+                        result.ErrorMessage = "Invalid password.";
+                        return result;
+                    }
+
+                    result.IsSuccess = true;
+                    result.Data = user;
                 }
             }
             catch (Exception ex)
