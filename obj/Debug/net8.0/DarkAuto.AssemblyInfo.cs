@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DarkAuto")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7c6678813a48391b5cafdde85056df452585ad57")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b2f08d4d821d28ab38835904c4789dc5888291f4")]
 [assembly: System.Reflection.AssemblyProductAttribute("DarkAuto")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DarkAuto")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
